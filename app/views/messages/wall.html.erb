@@ -1,0 +1,37 @@
+<div class="header">
+    <p>Coding Dojo Wall</p>
+    <p>Welcome, <%= @user['username'] %>!</p>
+    <p><a href="<%= logout_path %>">Log Out</a></p>
+</div>
+
+<h1>Post a Message</h1>
+<form action="<%= create_message_path %>" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <textarea name="message"></textarea>
+    <% if flash[:message] %>
+        <p class="error"><%= flash[:message] %></p>
+    <% end %>
+    <input type="submit" value="Post Message">
+</form>
+
+<% @messages.each do |message| %>
+<div class="message">
+    <h3><%= message.user.username %> - <%= message.created_at.strftime("%l:%M%p - %B %e, %Y") %></h3>
+    <p><%= message.message %></p>
+    <h4>Comments:</h4>
+    <% message.comments.each do |comment| %>
+        <div class="comment">
+            <h3><%= comment.user.username %> - <%= comment.created_at.strftime("%l:%M%p - %B %e, %Y") %></h3>
+            <p><%= comment.comment %></p>
+        </div>
+    <% end %>
+    <form action="<%= create_comment_path(message.id) %>" method="post">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <textarea name="comment"></textarea>
+        <% if (flash[:comment] and flash[:comment]['id'] == message.id.to_s) %>
+            <p class="error"><%= flash[:comment]['text'] %></p>
+        <% end %>
+        <input type="submit" value="Post Comment">
+    </form>
+</div>
+<% end %>

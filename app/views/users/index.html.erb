@@ -1,0 +1,10 @@
+<h1>Login Here: </h1>
+<form action="<%= login_path %>" method="post">
+    <input type = 'hidden' name = "authenticity_token" value = "<%=form_authenticity_token%>">
+    <label>User Name: </label>
+    <input type = "text" name = "username" id = "username">
+    <% if flash[:username] %>
+        <p class="error"><%= flash[:username] %></p>
+    <% end %>
+    <input type="submit" value="Login">
+</form>
